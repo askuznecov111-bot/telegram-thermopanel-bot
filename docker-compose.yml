@@ -1,0 +1,30 @@
+
+version: '3.8'
+
+services:
+  telegram-bot:
+    build: .
+    container_name: thermopanel_bot
+    restart: unless-stopped
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - ABACUS_API_KEY=${ABACUS_API_KEY}
+      - ABACUS_DEPLOYMENT_ID=${ABACUS_DEPLOYMENT_ID:-7c388e8dc}
+      - ABACUS_DEPLOYMENT_TOKEN=${ABACUS_DEPLOYMENT_TOKEN:-7ee99cc13aff41c7b00d1b6d7bb45bd8}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - HEALTH_CHECK_PORT=${HEALTH_CHECK_PORT:-8080}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

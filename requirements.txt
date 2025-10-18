@@ -1,0 +1,15 @@
+
+# Telegram Bot Library
+python-telegram-bot==20.7
+
+# Environment variables
+python-dotenv==1.0.0
+
+# HTTP requests
+requests==2.31.0
+
+# Abacus.AI SDK
+abacusai>=1.4.66
+
+# Additional utilities
+urllib3==2.1.0
