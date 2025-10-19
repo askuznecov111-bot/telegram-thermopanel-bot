@@ -14,8 +14,7 @@ from telegram.ext import (
     Application,
     CommandHandler,
     MessageHandler,
-    ContextTypes,
-    filters
+    Conte
 )
 from dotenv import load_dotenv
 from abacusai import ApiClient
@@ -35,7 +34,7 @@ logging.basicConfig(
     format=log_format,
     level=getattr(logging, log_level, logging.INFO),
     handlers=[
-        logging.FileHandler('bot.log', encoding='utf-8'),
+        logg
         logging.StreamHandler(sys.stdout)
     ]
 )
