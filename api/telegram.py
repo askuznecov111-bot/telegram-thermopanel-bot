@@ -9,10 +9,10 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters
 
 # Add project root to sys.path so we can import bot module
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-import bot
 
 # Build Telegram application using the existing token
 application = Application.builder().token(bot.TELEGRAM_TOKEN).build()
+
 
 # Register handlers from bot
 application.add_handler(CommandHandler("start", bot.start_command))
