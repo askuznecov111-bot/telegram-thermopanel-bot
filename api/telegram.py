@@ -1,45 +1,33 @@
 import os
-import sys
 import json
-import asyncio
+import requests
 from http.server import BaseHTTPRequestHandler
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 
 
-from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, filters
+def send_message(chat_id, text):
+    url = f'https://api.telegram.org/bot{TOKEN}/sendMessage'
+    payload = {'chat_id': chat_id, 'text': text}
+    requests.post(url, json=payload)
 
-import  bot
-
-# Build Telegram application using the existing token
-application = Application.builder().token(bot.TELEGRAM_TOKEN).build()
-
-
-# Register handlers from bot
-application.add_handler(CommandHandler("start", bot.start_command))
-application.add_handler(CommandHandler("help", bot.help_command))
-application.add_handler(CommandHandler("reset", bot.reset_command))
-application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), bot.handle_message))
-application.add_error_handler(bot.error_handler)
-
-# Initialize the application
-asyncio.run(application.initialize())
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         length = int(self.headers.get('content-length', 0))
         body = self.rfile.read(length)
         try:
-            data = json.loads(body.decode('utf-8'))
-            update = Update.de_json(data, application.bot)
-            asyncio.run(application.process_update(update))
+            update = json.loads(body.decode('utf-8'))
+            chat_id = update.get('message', {}).get('chat', {}).get('id')
+            if chat_id:
+                send_message(chat_id, 'Привет! Ваш бот развернут на Vercel.')
             self.send_response(200)
             self.end_headers()
-            self.wfile.write(b'{"ok":true}')
+            self.wfile.write(b'{"ok": true}')
         except Exception:
             self.send_response(500)
             self.end_headers()
-            self.wfile.write(b'{"ok":false}')
+            self.wfile.write(b'{"ok": false}')
 
     def do_GET(self):
         self.send_response(200)
@@ -47,5 +35,4 @@ class handler(BaseHTTPRequestHandler):
         self.wfile.write(b'OK')
 
     def log_message(self, *args):
-        # Disable default logging to stdout
         return
