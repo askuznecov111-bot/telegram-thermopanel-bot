@@ -3,6 +3,8 @@ import sys
 import json
 import asyncio
 from http.server import BaseHTTPRequestHandler
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
