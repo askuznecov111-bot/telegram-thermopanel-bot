@@ -33,10 +33,10 @@ log_level = os.getenv('LOG_LEVEL', 'INFO').upper()
 logging.basicConfig(
     format=log_format,
     level=getattr(logging, log_level, logging.INFO),
-    handlers=[
-        logg
-        logging.StreamHandler(sys.stdout)
-    ]
+  handlers=[
+    logging.StreamHandler(sys.stdout)
+]
+ ]
 )
 logger = logging.getLogger(__name__)
 
